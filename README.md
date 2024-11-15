@@ -1,24 +1,68 @@
-# working_time_management
+# Munkaidő Nyilvántartás
 
-## Project setup
+Ez egy időnyilvántartó alkalmazás, amely lehetővé teszi a felhasználók számára, hogy nyomon kövessék munkaidejüket, megtekintsék a napi, heti és havi összesítőket, és kezeljék a munkaórákat és szabadságokat. Az alkalmazás Vue.js alapú, és Bootstrapet használ a stílushoz.
+
+## Fő Funkciók
+
+- **Napi nézet**: A felhasználók megtekinthetik az adott nap eseményeit óránkénti bontásban, és láthatják a munkaidőt és szabadságot színes sávokkal jelölve.
+- **Heti nézet**: A heti összesítőben megjelennek a hét napjai, munkaórák, projektek/tag-ek és szabadság státusz.
+- **Havi nézet**: Csempe formátumú naptár, amely összefoglalja a munkaidőt és szabadságot havi bontásban.
+- **CRUD műveletek**: Lehetőség van munkaórák hozzáadására, szerkesztésére és törlésére a napi nézetben, illetve a napok közötti váltásra.
+
+## Technológiák
+
+- **Frontend keretrendszer**: Vue.js
+- **Stílus**: Bootstrap
+- **Adatkezelés**: IndexedDB a munkaidő bejegyzések tárolására
+- **Dátumkezelés**: date-fns könyvtár
+- **Eseménykezelés**: `emit` események a komponensek közötti kommunikációhoz
+
+## Telepítés és Futtatás
+
+1. Klónozd a projektet:
+   ```bash
+   git clone working_time_management
+   cd working_time_management
+   ```
+
+## Telepítsd a szükséges csomagokat:
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Futtasd az alkalmazást:
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Nyisd meg a böngészőt, és látogass el a következő címre:
+
 ```
-npm run build
+http://localhost:8080
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Használat
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1.  **Napi nézet**:
+
+    - A napi nézetben az aktuális nap eseményei jelennek meg óránkénti bontásban.
+    - A szabadság napok világos zöld sávval vannak jelölve 8:00 és 16:00 között, míg a munkaidő sárga színnel.
+    - Az események mellett található gombokkal szerkesztheted vagy törölheted a bejegyzéseket.
+
+2.  **Heti nézet**:
+
+    - A heti nézetben láthatod az összesített munkaórákat, projektek/tag-eket és szabadság státuszt minden napra.
+    - Az összes munkaóra a hét végén kerül összegzésre.
+
+3.  **Havi nézet**:
+
+    - A havi nézet egy csempés naptár, amely összefoglalja a napi munkaórákat.
+    - A szabadság napokat zölddel, a munkaórás napokat sárgával jelöljük.
+
+## Nem volt idő a következők elvégzésére:
+
+1. Hibakezelések( Kezdési Idő nem lehetne nagyobb mint a Befejezési Idő ...stb )
+2. Filter normális kialakitása.
+3. build
