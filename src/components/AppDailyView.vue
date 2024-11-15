@@ -13,7 +13,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="entry in entries" :key="entry.id">
+        <tr
+          v-for="entry in entries"
+          :key="entry.id"
+          :class="{ 'table-success': entry.isHoliday }"
+        >
           <td>{{ entry.date }}</td>
           <td>{{ entry.startTime }}</td>
           <td>{{ entry.endTime }}</td>

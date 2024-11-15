@@ -1,5 +1,14 @@
 <template>
+  <AppToastNotification v-if="toastMessage" :message="toastMessage" />
   <div class="container">
+    <div class="mb-3 mt-5 row">
+      <input
+        v-model="projectTagFilter"
+        class="form-control"
+        type="text"
+        placeholder="Szűrés Projekt/Tag alapján"
+      />
+    </div>
     <div class="buttons row mt-5">
       <div class="btn-group mb-3 col-sm d-inline-block" role="group">
         <button class="btn btn-secondary" @click="viewMode = 'daily'">
@@ -122,9 +131,11 @@
 </template>
 
 <script>
+import { addWorkEntry, getAllWorkEntries } from "../data/db.js";
 import AppDailyView from "./AppDailyView.vue";
 import AppWeeklyView from "./AppWeeklyView.vue";
 import AppMonthlyView from "./AppMonthlyView.vue";
+import AppToastNotification from "./AppToastNotification.vue";
 
 export default {
   name: "AppHome",
@@ -132,6 +143,7 @@ export default {
     AppDailyView,
     AppWeeklyView,
     AppMonthlyView,
+    AppToastNotification,
   },
   data() {
     return {
@@ -143,21 +155,31 @@ export default {
       projectTag: "",
       isHoliday: false,
       viewMode: "daily",
+      projectTagFilter: "",
       entries: [],
+      toastMessage: "",
     };
+  },
+  created() {
+    this.fetchEntries();
   },
 
   methods: {
-    addWorkTime() {
+    async fetchEntries() {
+      this.entries = await getAllWorkEntries();
+    },
+
+    async addWorkTime() {
       const workEntry = {
         date: this.date,
         startTime: this.isHoliday ? null : this.startTime,
         endTime: this.isHoliday ? null : this.endTime,
         description: this.isHoliday ? null : this.description,
-        projectTag: this.projectTag ? "#Szabadság" : this.projectTag,
+        projectTag: this.isHoliday ? "#Szabadság" : this.projectTag,
         isHoliday: this.isHoliday,
       };
-      console.log("Új Munkaidő Bejegyzés:", workEntry);
+
+      await addWorkEntry(workEntry);
 
       this.showModal = false;
       this.date = "";
@@ -166,11 +188,59 @@ export default {
       this.description = "";
       this.projectTag = "";
       this.isHoliday = false;
+
+      this.fetchEntries();
+
+      this.showToast("Munkaidő bejegyzés sikeresen hozzáadva!");
+    },
+
+    showToast(message) {
+      this.toastMessage = message;
+      setTimeout(() => {
+        this.toastMessage = "";
+      }, 5000);
     },
   },
-  omputed: {
+  computed: {
     filteredEntries() {
-      return this.entries;
+      const today = new Date();
+      let entries = this.entries;
+
+      if (this.viewMode === "daily") {
+        entries = entries.filter(
+          (entry) =>
+            new Date(entry.date).toDateString() === today.toDateString()
+        );
+      } else if (this.viewMode === "weekly") {
+        const startOfWeek = new Date(
+          today.setDate(today.getDate() - today.getDay())
+        );
+        const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
+        entries = entries.filter((entry) => {
+          const entryDate = new Date(entry.date);
+          return entryDate >= startOfWeek && entryDate <= endOfWeek;
+        });
+      } else if (this.viewMode === "monthly") {
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const endOfMonth = new Date(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          0
+        );
+        entries = entries.filter((entry) => {
+          const entryDate = new Date(entry.date);
+          return entryDate >= startOfMonth && entryDate <= endOfMonth;
+        });
+      }
+
+      if (this.projectTagFilter) {
+        entries = entries.filter((entry) =>
+          entry.projectTag
+            .toLowerCase()
+            .includes(this.projectTagFilter.toLowerCase())
+        );
+      }
+      return entries;
     },
   },
 };
