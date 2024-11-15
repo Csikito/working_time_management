@@ -10,6 +10,7 @@
           <th>Leírás</th>
           <th>Projekt/Tag</th>
           <th>Szabadság</th>
+          <th>Műveletek</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,22 @@
           <td>{{ entry.description }}</td>
           <td>{{ entry.projectTag }}</td>
           <td>{{ entry.isHoliday ? "Igen" : "Nem" }}</td>
+          <td>
+            <button
+              class="btn btn-link p-0 me-2"
+              @click="$emit('edit-entry', entry)"
+            >
+              <i class="bi bi-pencil-square"></i>
+              <!-- Szerkesztés ikon -->
+            </button>
+            <button
+              class="btn btn-link p-0 text-danger"
+              @click="$emit('delete-entry', entry.id)"
+            >
+              <i class="bi bi-trash"></i>
+              <!-- Törlés ikon -->
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

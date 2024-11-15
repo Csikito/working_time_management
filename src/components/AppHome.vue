@@ -116,8 +116,101 @@
         </div>
       </div>
     </div>
+    <div
+      v-if="showEditModal"
+      class="modal fade show"
+      style="display: block; background-color: rgba(0, 0, 0, 0.6)"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+          <div class="modal-header">
+            <h5 class="modal-title">Munkaidő Bejegyzés Szerkesztése</h5>
+            <button
+              type="button"
+              class="btn-close"
+              @click="showEditModal = false"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="updateWorkEntry">
+              <div class="mb-3">
+                <label for="date" class="form-label">Dátum</label>
+                <input
+                  type="date"
+                  id="date"
+                  class="form-control"
+                  v-model="selectedEntry.date"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="start-time" class="form-label">Kezdési Idő</label>
+                <input
+                  type="time"
+                  id="start-time"
+                  class="form-control"
+                  v-model="selectedEntry.startTime"
+                  :disabled="selectedEntry.isHoliday"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="end-time" class="form-label">Befejezési Idő</label>
+                <input
+                  type="time"
+                  id="end-time"
+                  class="form-control"
+                  v-model="selectedEntry.endTime"
+                  :disabled="selectedEntry.isHoliday"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label"
+                  >Feladat Leírása</label
+                >
+                <textarea
+                  id="description"
+                  class="form-control"
+                  v-model="selectedEntry.description"
+                  :disabled="selectedEntry.isHoliday"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="project-tag" class="form-label">Projekt/Tag</label>
+                <input
+                  type="text"
+                  id="project-tag"
+                  class="form-control"
+                  v-model="selectedEntry.projectTag"
+                  :disabled="selectedEntry.isHoliday"
+                />
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="holidayCheck"
+                  v-model="selectedEntry.isHoliday"
+                />
+                <label class="form-check-label" for="holidayCheck"
+                  >Szabadság</label
+                >
+              </div>
+              <button type="submit" class="btn btn-success">Mentés</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="view-tables mt-5">
-      <AppDailyView v-if="viewMode === 'daily'" :entries="filteredEntries" />
+      <AppDailyView
+        v-if="viewMode === 'daily'"
+        :entries="filteredEntries"
+        @edit-entry="editEntry"
+        @delete-entry="deleteEntry"
+      />
       <AppWeeklyView
         v-else-if="viewMode === 'weekly'"
         :entries="filteredEntries"
@@ -131,7 +224,12 @@
 </template>
 
 <script>
-import { addWorkEntry, getAllWorkEntries } from "../data/db.js";
+import {
+  addWorkEntry,
+  getAllWorkEntries,
+  updateWorkEntry,
+  deleteWorkEntry,
+} from "../data/db.js";
 import AppDailyView from "./AppDailyView.vue";
 import AppWeeklyView from "./AppWeeklyView.vue";
 import AppMonthlyView from "./AppMonthlyView.vue";
@@ -158,6 +256,8 @@ export default {
       projectTagFilter: "",
       entries: [],
       toastMessage: "",
+      showEditModal: false,
+      selectedEntry: null,
     };
   },
   created() {
@@ -199,6 +299,25 @@ export default {
       setTimeout(() => {
         this.toastMessage = "";
       }, 5000);
+    },
+
+    editEntry(entry) {
+      this.selectedEntry = JSON.parse(JSON.stringify(entry));
+      this.showEditModal = true;
+    },
+
+    async deleteEntry(id) {
+      await deleteWorkEntry(id);
+      this.fetchEntries();
+      this.showToast("Bejegyzés törölve!");
+    },
+
+    async updateWorkEntry() {
+      const entryToUpdate = JSON.parse(JSON.stringify(this.selectedEntry));
+      await updateWorkEntry(entryToUpdate);
+      this.showEditModal = false;
+      this.fetchEntries();
+      this.showToast("Bejegyzés módosítva!");
     },
   },
   computed: {
