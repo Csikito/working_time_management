@@ -14,22 +14,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Napi</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Heti</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Hónapi</a>
-            </li>
-          </ul>
-        </div>
+
         <form class="d-flex" @submit.prevent="handleSearch">
           <input
             class="form-control me-2"
