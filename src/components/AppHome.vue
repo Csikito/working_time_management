@@ -322,35 +322,7 @@ export default {
   },
   computed: {
     filteredEntries() {
-      const today = new Date();
       let entries = this.entries;
-
-      if (this.viewMode === "daily") {
-        entries = entries.filter(
-          (entry) =>
-            new Date(entry.date).toDateString() === today.toDateString()
-        );
-      } else if (this.viewMode === "weekly") {
-        const startOfWeek = new Date(
-          today.setDate(today.getDate() - today.getDay())
-        );
-        const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
-        entries = entries.filter((entry) => {
-          const entryDate = new Date(entry.date);
-          return entryDate >= startOfWeek && entryDate <= endOfWeek;
-        });
-      } else if (this.viewMode === "monthly") {
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        const endOfMonth = new Date(
-          today.getFullYear(),
-          today.getMonth() + 1,
-          0
-        );
-        entries = entries.filter((entry) => {
-          const entryDate = new Date(entry.date);
-          return entryDate >= startOfMonth && entryDate <= endOfMonth;
-        });
-      }
 
       if (this.projectTagFilter) {
         entries = entries.filter((entry) =>

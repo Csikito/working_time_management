@@ -83,6 +83,7 @@ export default {
       const days = eachDayOfInterval({ start, end });
 
       return days.map((day) => {
+        console.log(this.entries);
         const entry = this.entries.find((e) =>
           isSameDay(new Date(e.date), day)
         );
