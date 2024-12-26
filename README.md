@@ -60,3 +60,16 @@ http://localhost:8080
 
     - A havi nézet egy csempés naptár, amely összefoglalja a napi munkaórákat.
     - A szabadság napokat zölddel, a munkaórás napokat sárgával jelöljük.
+
+## Képek
+   ### Napi   
+   ![day](https://github.com/user-attachments/assets/99f3ace2-ee71-4317-8443-6c73c54faf2f)
+   ### Szerkesztés
+   ![edit](https://github.com/user-attachments/assets/0bee8081-09d8-4aa0-8d1b-afc5c16bd721)
+   ### Heti
+   ![week](https://github.com/user-attachments/assets/79891f8a-4b42-4978-8a42-0aff9d2188af)
+   ### Havi
+   ![month](https://github.com/user-attachments/assets/4ee48bf2-435e-48a1-a575-1952c3d5a063)
+   
+## Megjegyzés
+Ezt a projektet 8 + 3 óra alatt készítettem el. Az időkeret szűkössége miatt a funkcionalitásra és a kód alapvető strukturáltságára helyeztem a hangsúlyt. Tisztában vagyok vele, hogy van még hová fejlődni, és bízom benne, hogy a jövőbeli projekteken tovább tudom fejleszteni a készségeimet.
