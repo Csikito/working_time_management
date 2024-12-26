@@ -83,23 +83,44 @@ export default {
       const days = eachDayOfInterval({ start, end });
 
       return days.map((day) => {
-        const entry = this.entries.find((e) =>
+        const dailyEntries = this.entries.filter((e) =>
           isSameDay(new Date(e.date), day)
         );
 
-        let hoursWorked = null;
-        if (entry && entry.startTime && entry.endTime) {
-          const startDateTime = parse(entry.startTime, "HH:mm", new Date(day));
-          const endDateTime = parse(entry.endTime, "HH:mm", new Date(day));
-          const minutesWorked = differenceInMinutes(endDateTime, startDateTime);
-          hoursWorked = (minutesWorked / 60).toFixed(2);
-        }
+        let totalMinutesWorked = 0;
+        let isHoliday = false;
+
+        dailyEntries.forEach((entry) => {
+          if (entry.startTime && entry.endTime) {
+            const startDateTime = parse(
+              entry.startTime,
+              "HH:mm",
+              new Date(day)
+            );
+            const endDateTime = parse(entry.endTime, "HH:mm", new Date(day));
+            totalMinutesWorked += differenceInMinutes(
+              endDateTime,
+              startDateTime
+            );
+          }
+
+          if (entry.isHoliday) {
+            isHoliday = true;
+          }
+        });
+
+        const hours = Math.floor(totalMinutesWorked / 60);
+        const minutes = totalMinutesWorked % 60;
+        const formattedHoursWorked =
+          totalMinutesWorked > 0
+            ? `${hours}:${minutes.toString().padStart(2, "0")}`
+            : null;
 
         return {
           date: day,
           formattedDate: format(day, "d"),
-          hoursWorked,
-          isHoliday: entry ? entry.isHoliday : false,
+          hoursWorked: formattedHoursWorked,
+          isHoliday,
           isToday: isSameDay(day, this.today),
         };
       });

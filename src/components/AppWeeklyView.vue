@@ -123,26 +123,59 @@ export default {
       });
 
       return days.map((day) => {
-        const entry = this.entries.find((e) =>
+        // Az adott naphoz tartozó összes bejegyzés kiszűrése
+        const dailyEntries = this.entries.filter((e) =>
           isSameDay(new Date(e.date), day)
         );
 
-        let hoursWorked = null;
-        if (entry && entry.startTime && entry.endTime) {
-          const startDateTime = parse(entry.startTime, "HH:mm", new Date(day));
-          const endDateTime = parse(entry.endTime, "HH:mm", new Date(day));
-          const minutesWorked = differenceInMinutes(endDateTime, startDateTime);
-          hoursWorked = (minutesWorked / 60).toFixed(2);
-        }
+        // Összesített munkaóra, leírások, projektek összegyűjtése
+        let totalMinutesWorked = 0;
+        const descriptionsSet = new Set();
+        const projectTagsSet = new Set();
+        let isHoliday = false;
+
+        dailyEntries.forEach((entry) => {
+          if (entry.startTime && entry.endTime) {
+            const startDateTime = parse(
+              entry.startTime,
+              "HH:mm",
+              new Date(day)
+            );
+            const endDateTime = parse(entry.endTime, "HH:mm", new Date(day));
+            totalMinutesWorked += differenceInMinutes(
+              endDateTime,
+              startDateTime
+            );
+          }
+
+          if (entry.description) {
+            descriptionsSet.add(entry.description.trim());
+          }
+
+          if (entry.projectTag) {
+            projectTagsSet.add(entry.projectTag.trim());
+          }
+
+          if (entry.isHoliday) {
+            isHoliday = true;
+          }
+        });
+
+        const hours = Math.floor(totalMinutesWorked / 60);
+        const minutes = totalMinutesWorked % 60;
+        const formattedHoursWorked =
+          totalMinutesWorked > 0
+            ? `${hours}:${minutes.toString().padStart(2, "0")}`
+            : null;
 
         return {
           date: day,
           dayName: format(day, "EEEE", { locale: hu }),
           formattedDate: format(day, "yyyy-MM-dd"),
-          hoursWorked,
-          description: entry ? entry.description : null,
-          projectTag: entry ? entry.projectTag : null,
-          isHoliday: entry ? entry.isHoliday : false,
+          hoursWorked: formattedHoursWorked,
+          description: Array.from(descriptionsSet).join(", "),
+          projectTag: Array.from(projectTagsSet).join(", "),
+          isHoliday,
         };
       });
     },
