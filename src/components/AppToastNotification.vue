@@ -5,7 +5,13 @@
     role="alert"
     aria-live="assertive"
     aria-atomic="true"
-    style="position: fixed; bottom: 1rem; right: 1rem; min-width: 200px"
+    style="
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      min-width: 200px;
+      z-index: 999;
+    "
   >
     <div class="toast-header bg-success text-white">
       <strong class="me-auto">Info</strong>

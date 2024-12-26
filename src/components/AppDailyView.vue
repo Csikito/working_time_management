@@ -77,10 +77,11 @@ export default {
       const events = this.entries.filter((entry) =>
         isSameDay(new Date(entry.date), this.currentDate)
       );
-
       if (events.some((event) => event.isHoliday)) {
+        const registry = events.find((event) => event.isHoliday);
+
         events.push({
-          id: "holiday",
+          id: registry.id,
           startTime: "08:00",
           endTime: "16:00",
           description: "Szabadság",
@@ -120,13 +121,6 @@ export default {
     formatTime(time) {
       if (!time) return "";
       return format(parse(time, "HH:mm", this.currentDate), "HH:mm");
-    },
-    editEvent(event) {
-      console.log("Szerkesztés:", event);
-    },
-    deleteEvent(eventId) {
-      console.log("Törlés:", eventId);
-      this.$emit("delete-event", eventId);
     },
   },
 };
@@ -169,12 +163,14 @@ export default {
   position: absolute;
   left: 0;
   width: 100%;
-  color: white;
+  color: #000;
   padding: 5px;
   font-size: 0.8rem;
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+  z-index: 99;
 }
 
 .event-actions {
@@ -183,9 +179,5 @@ export default {
   right: 5px;
   display: flex;
   gap: 5px;
-}
-
-.event[style*="background-color: #d4edda"] {
-  color: black;
 }
 </style>

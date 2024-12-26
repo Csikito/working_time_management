@@ -1,7 +1,7 @@
 <template>
   <AppToastNotification v-if="toastMessage" :message="toastMessage" />
   <div class="container">
-    <div class="mb-3 mt-5 row">
+    <div v-if="viewMode === 'monthly'" class="mb-3 mt-5 row">
       <input
         v-model="projectTagFilter"
         class="form-control"
@@ -279,19 +279,25 @@ export default {
         isHoliday: this.isHoliday,
       };
 
-      await addWorkEntry(workEntry);
+      if (this.isHoliday || this.startTime < this.endTime) {
+        await addWorkEntry(workEntry);
 
-      this.showModal = false;
-      this.date = "";
-      this.startTime = "";
-      this.endTime = "";
-      this.description = "";
-      this.projectTag = "";
-      this.isHoliday = false;
+        this.showModal = false;
+        this.date = "";
+        this.startTime = "";
+        this.endTime = "";
+        this.description = "";
+        this.projectTag = "";
+        this.isHoliday = false;
 
-      this.fetchEntries();
+        this.fetchEntries();
 
-      this.showToast("Munkaidő bejegyzés sikeresen hozzáadva!");
+        this.showToast("Munkaidő bejegyzés sikeresen hozzáadva!");
+      } else {
+        this.showToast(
+          `Kezdési idő nem lehet később mint a befejezési idő. ( ${this.startTime} - ${this.endTime} )`
+        );
+      }
     },
 
     showToast(message) {

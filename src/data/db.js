@@ -28,6 +28,5 @@ export async function deleteWorkEntry(id) {
 
 export async function updateWorkEntry(entry) {
   const db = await dbPromise;
-  console.log(entry);
   await db.put("workEntries", entry);
 }
