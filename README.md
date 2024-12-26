@@ -60,9 +60,3 @@ http://localhost:8080
 
     - A havi nézet egy csempés naptár, amely összefoglalja a napi munkaórákat.
     - A szabadság napokat zölddel, a munkaórás napokat sárgával jelöljük.
-
-## Nem volt idő a következők elvégzésére:
-
-1. Hibakezelések( Kezdési Idő nem lehetne nagyobb mint a Befejezési Idő ...stb )
-2. Filter normális kialakitása.
-3. build
