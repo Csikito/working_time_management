@@ -107,8 +107,9 @@ export default {
     paddedDays() {
       const firstDayOfMonth = startOfMonth(this.currentMonth);
       const startDayOfWeek = getDay(firstDayOfMonth);
+      const euStartDayOfWeek = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
 
-      const paddedDays = Array.from({ length: startDayOfWeek }).fill(null);
+      const paddedDays = Array.from({ length: euStartDayOfWeek }).fill(null);
       paddedDays.push(...this.formattedDays);
 
       return paddedDays;
