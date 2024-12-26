@@ -1,4 +1,4 @@
-# Munkaidő Nyilvántartás
+#  📝 [Munkaidő Nyilvántartás](https://csikito.github.io/working_time_management/) 📝
 
 Ez egy időnyilvántartó alkalmazás, amely lehetővé teszi a felhasználók számára, hogy nyomon kövessék munkaidejüket, megtekintsék a napi, heti és havi összesítőket, és kezeljék a munkaórákat és szabadságokat. Az alkalmazás Vue.js alapú, és Bootstrapet használ a stílushoz.
 
